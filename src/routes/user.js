@@ -1,10 +1,16 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const userController = require("../controllers/UserController");
+const { isAuthorized } = require('../middlewares/authMiddleware');
 
-router.post("/login-google", (req, res, next) =>
-  userController.loginGoogle(req, res, next)
-);
+const userController = require('../controllers/UserController');
+
+router.post('/login-google', (req, res) => userController.loginGoogle(req, res));
+
+router.delete('/logout', (req, res) => userController.logout(req, res));
+
+router.put('/refresh-token', (req, res) => userController.refreshToken(req, res));
+
+router.get('/info-user2222', isAuthorized, (req, res, next) => userController.infoUser(req, res, next));
 
 module.exports = router;
