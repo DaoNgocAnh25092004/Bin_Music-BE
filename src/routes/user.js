@@ -11,6 +11,6 @@ router.delete('/logout', (req, res) => userController.logout(req, res));
 
 router.put('/refresh-token', (req, res) => userController.refreshToken(req, res));
 
-router.get('/info-user2222', isAuthorized, (req, res, next) => userController.infoUser(req, res, next));
+router.get('/info-user', isAuthorized, (req, res, next) => userController.infoUser(req, res, next));
 
 module.exports = router;
