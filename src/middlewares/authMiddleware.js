@@ -4,7 +4,6 @@ const { verifyToken } = require('../providers/JwtProvider');
 const isAuthorized = async (req, res, next) => {
     // TH1: Get access token from cookie
     const accessTokenFromCookie = req.cookies?.accessToken;
-    console.log('🚀 ~ isAuthorized ~ accessTokenFromCookie:', accessTokenFromCookie);
 
     if (!accessTokenFromCookie) {
         return res.status(401).json({ message: 'Unauthorized? (Token not found cookies)' });
@@ -17,7 +16,6 @@ const isAuthorized = async (req, res, next) => {
             // accessTokenFromHeader
             process.env.ACCESS_TOKEN_SECRET,
         );
-        console.log('🚀 ~ isAuthorized ~ accessTokenPayload:', accessTokenPayload);
 
         // Step 02: If access token is valid then save info verify  "req.jwtDecoded", to use in the next
         req.jwtDecoded = accessTokenPayload;

@@ -49,7 +49,7 @@ class UserController {
             };
 
             // Create access token and refresh token
-            const accessToken = await generateToken(userInfo, process.env.ACCESS_TOKEN_SECRET, 10);
+            const accessToken = await generateToken(userInfo, process.env.ACCESS_TOKEN_SECRET, '1h');
 
             const refreshToken = await generateToken(userInfo, process.env.REFRESH_TOKEN_SECRET, '14 days');
 
@@ -121,7 +121,7 @@ class UserController {
             };
 
             // Create access token
-            const accessToken = await generateToken(userInfo, process.env.ACCESS_TOKEN_SECRET, 10);
+            const accessToken = await generateToken(userInfo, process.env.ACCESS_TOKEN_SECRET, '1h');
 
             // Send access token by cookie
             res.cookie('accessToken', accessToken, {
