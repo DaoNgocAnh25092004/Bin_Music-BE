@@ -145,10 +145,9 @@ class UserController {
     async infoUser(req, res) {
         try {
             const accessTokenFromCookie = req.cookies?.accessToken;
-            console.log('🚀 ~ isAuthorized ~ accessTokenFromCookieww22:', accessTokenFromCookie);
+
             return res.status(200).json({ message: 'ok' });
         } catch (error) {
-            console.log('🚀 ~ UserController ~ infoUser ~ error:', error);
             return res.status(401).json({ message: 'Unauthorized' });
         }
     }

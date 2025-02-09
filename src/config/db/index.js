@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 async function connect() {
     try {
-        await mongoose.connect('mongodb://localhost:27017/bin_music', {
+        console.log(process.env.MONGODB_URI);
+        await mongoose.connect('mongodb+srv://binmusic:QR1nT1cAKFsz46Yf@cluster0-daongocanh.ttyz0.mongodb.net/bin_music', {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
