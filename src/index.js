@@ -11,6 +11,7 @@ const corsOptions = require('./config/cors');
 const cacheMiddleware = require('./config/cache');
 
 const dotenv = require('dotenv');
+
 // Load environment variables
 dotenv.config();
 
@@ -35,7 +36,7 @@ db.connect();
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// // Route init
+// Route init
 route(app);
 
 app.listen(port, () => {
