@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 async function connect() {
     try {
-        console.log(process.env.MONGODB_URI);
-        await mongoose.connect('mongodb+srv://binmusic:QR1nT1cAKFsz46Yf@cluster0-daongocanh.ttyz0.mongodb.net/bin_music', {
+        await mongoose.connect(process.env.MONGODB_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });

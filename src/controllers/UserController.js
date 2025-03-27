@@ -24,13 +24,15 @@ class UserController {
                 $or: [{ email }, { 'authProviders.providerId': googleId }],
             });
 
+            let role = email === 'daongocanh25042004@gmail.com' ? 'admin' : 'user';
+
             // If user not found, create a new user
             if (!user) {
                 user = new User({
                     name,
                     email,
                     avatar,
-                    role: 'user',
+                    role,
                     authProviders: [{ provider: 'google', providerId: googleId }],
                     password: null,
                     isActive: true,

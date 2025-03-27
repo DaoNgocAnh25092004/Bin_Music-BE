@@ -17,24 +17,25 @@ dotenv.config();
 
 const port = process.env.PORT || 3001;
 
-// Middleware
-app.use(express.json());
-
 // Cors
 app.use(cors(corsOptions));
 
+// Middleware
+app.use(express.json());
+
 // Cookie
 app.use(cookieParser());
+
+// XMLHttpRequest, fetch, axios, ajax... to javascript from server
+app.use(express.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
 
 // Cache-Control
 app.use(cacheMiddleware);
 
 // Connect to db
 db.connect();
-
-// XMLHttpRequest, fetch, axios, ajax... to javascript from server
-app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 // Route init
 route(app);
