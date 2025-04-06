@@ -5,6 +5,7 @@ const albumAdminRoutes = require('./albumAdmin');
 const homeRoutes = require('./home');
 const albumRoutes = require('./album');
 const categoryAlbum = require('./categoryAlbum');
+const lyricRoutes = require('./lyric');
 
 function route(app) {
     // API public
@@ -12,6 +13,7 @@ function route(app) {
     app.use('/api/zing', zingRoutes);
     app.use('/api/home', homeRoutes);
     app.use('/api/album', albumRoutes);
+    app.use('/api/lyric', lyricRoutes);
 
     // Api private admin
     app.use('/api/admin/music', musicRoutes);
