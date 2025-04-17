@@ -6,6 +6,7 @@ const homeRoutes = require('./home');
 const albumRoutes = require('./album');
 const categoryAlbum = require('./categoryAlbum');
 const lyricRoutes = require('./lyric');
+const openAiRoutes = require('./openAi');
 
 function route(app) {
     // API public
@@ -14,6 +15,7 @@ function route(app) {
     app.use('/api/home', homeRoutes);
     app.use('/api/album', albumRoutes);
     app.use('/api/lyric', lyricRoutes);
+    app.use('/api/ai', openAiRoutes);
 
     // Api private admin
     app.use('/api/admin/music', musicRoutes);
