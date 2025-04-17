@@ -1,9 +1,10 @@
 const AlbumModel = require('../models/Album');
 const CategoryAlbumModel = require('../models/CategoryAlbum');
+const MusicModel = require('../models/Music');
 
 class AlbumController {
     //[Get] /album/:categoryName
-    async getHome(req, res) {
+    async getAlbumByName(req, res) {
         try {
             const { categoryName } = req.params;
 
@@ -17,6 +18,17 @@ class AlbumController {
             return res.status(200).json({ albums });
         } catch (error) {
             return res.status(500).json({ message: error.message });
+        }
+    }
+
+    // [GET] /suggested-songs
+    async getSuggestSong(req, res) {
+        try {
+            const limit = parseInt(req.query.limit) || 9;
+            const songs = await MusicModel.aggregate([{ $sample: { size: limit } }]);
+            res.json({ success: true, songs });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Lỗi server', error });
         }
     }
 
