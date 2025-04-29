@@ -36,8 +36,10 @@ Hãy chọn ra ${songCount} bài phù hợp với:
 - Ngôn ngữ: ${languages}
 
 Chỉ chọn từ danh sách trên.
-Trả về mảng JSON với các trường: title, artist.
-      `;
+Trả về một JSON object với 2 trường:
+- "title": tên playlist ngắn gọn
+- "songs": mảng bài hát với các trường: title, artist
+`;
 
             // 4. Call Google Gemini API
             const apiKey = process.env.GEMINI_API_KEY;
@@ -49,21 +51,18 @@ Trả về mảng JSON với các trường: title, artist.
 
             // 5. Extract AI's raw suggestion text
             const raw = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            console.log('🎧 AI raw suggestion:', raw);
 
-            // 6. Clean markdown formatting & extract JSON array
+            // 6. Clean markdown formatting & parse JSON object
             const cleaned = raw.replace(/```(?:json)?/g, '').trim();
-            const start = cleaned.indexOf('[');
-            const end = cleaned.lastIndexOf(']');
+            let playlistTitle = '';
             let suggested = [];
-            if (start !== -1 && end !== -1 && end > start) {
-                try {
-                    suggested = JSON.parse(cleaned.slice(start, end + 1));
-                } catch (e) {
-                    console.error('Parse JSON error:', e);
-                }
-            } else {
-                console.error('No JSON array found in AI response');
+
+            try {
+                const parsed = JSON.parse(cleaned);
+                playlistTitle = parsed.title || '';
+                suggested = parsed.songs || [];
+            } catch (e) {
+                console.error('Parse JSON error:', e);
             }
 
             // 7. Enrich suggestions with audioUrl and thumbnailUrl
@@ -72,7 +71,7 @@ Trả về mảng JSON với các trường: title, artist.
                 const titlePattern = new RegExp(`^${escapeRegex(item.title)}$`, 'i');
                 const artistList = item.artist.split(',').map((a) => a.trim().toLowerCase());
 
-                const candidates = await MusicModel.find({ name: titlePattern }).select('name listArtist audioUrl thumbnailUrl');
+                const candidates = await MusicModel.find({ name: titlePattern }).select('name listArtist audioUrl thumbnailUrl genres');
 
                 if (candidates.length) {
                     const match = candidates.find((doc) => {
@@ -98,7 +97,10 @@ Trả về mảng JSON với các trường: title, artist.
                 }
             }
 
-            return res.status(200).json({ songs: result });
+            return res.status(200).json({
+                title: playlistTitle,
+                songs: result,
+            });
         } catch (error) {
             console.error('[AiController Error]', error);
             return res.status(500).json({ message: 'Đã có lỗi xảy ra', detail: error.message });

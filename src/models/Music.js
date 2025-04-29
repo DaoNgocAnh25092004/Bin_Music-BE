@@ -25,6 +25,10 @@ const Music = new Schema(
             type: String,
             required: true,
         },
+        favoriteCount: {
+            type: Number,
+            default: 0,
+        },
     },
     { timestamps: true },
 );
