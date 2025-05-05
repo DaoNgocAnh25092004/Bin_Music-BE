@@ -1,64 +1,26 @@
-const { uploadFile } = require('../providers/CloudinaryProvider');
 const MusicModel = require('../models/Music');
-const LyricsModel = require('../models/Lyric');
 
 class MusicController {
-    // [POST] admin/music/create
-    async create(req, res) {
+    // [GET] /music/:id
+    async getById(req, res) {
         try {
-            const { name, listArtist, genres, lyric } = req.body;
+            const { musicId } = req.params;
+            const music = await MusicModel.findById(musicId);
 
-            // Upload file lên Cloudinary
-            const audioFile = await uploadFile(req.files.audio[0].buffer, 'music_audios', 'video');
-            const thumbnailFile = await uploadFile(req.files.thumbnail[0].buffer, 'music_thumbnails', 'image');
-
-            const newMusic = await MusicModel.create({
-                name,
-                listArtist: JSON.parse(listArtist),
-                genres: JSON.parse(genres),
-                audioUrl: audioFile.url,
-                thumbnailUrl: thumbnailFile.url,
-            });
-
-            if (lyric) {
-                await LyricsModel.create({
-                    musicId: newMusic._id,
-                    lyric: lyric,
-                });
+            if (!music) {
+                return res.status(404).json({ message: 'Bài hát không tồn tại!' });
             }
 
-            return res.status(201).json({ message: 'Tạo bài hát thành công!' });
+            return res.status(200).json(music);
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
     }
 
-    // [GET] admin/music/list
-    async list(req, res) {
-        try {
-            let { page = 1, limit = 3 } = req.query;
-            page = parseInt(page);
-            limit = parseInt(limit);
-
-            const musics = await MusicModel.find()
-                .skip((page - 1) * limit)
-                .limit(limit);
-
-            const total = await MusicModel.countDocuments();
-
-            return res.status(200).json({
-                data: musics,
-                hasMore: total > page * limit,
-            });
-        } catch (error) {
-            return res.status(500).json({ message: error.message });
-        }
-    }
-
-    // [GET] admin/music/search
+    // [GET] /music/search
     async search(req, res) {
         try {
-            let { page = 1, limit = 5, name = '', artist = '' } = req.query;
+            let { page = 1, limit = 10, name = '', artist = '' } = req.query;
             page = parseInt(page);
             limit = parseInt(limit);
 
